@@ -1,0 +1,74 @@
+宝塔面板5.9开心版原始文件
+
+方法1：
+安装bt5.9
+yum install -y wget && wget -O install.sh http://download.bt.cn/install/install.sh && echo y | sh install.sh
+
+升级到专业版
+wget -O update.sh http://download.bt.cn/install/update_pro.sh && bash update.sh pro
+
+/www/server/panel/data/userInfo.json
+/etc/init.d/bt restart
+
+反正就这样就可以装付费插件了，到期时间显示当天
+
+还有一种方法(方法2)，先正常安装5.9.2专业版，然后用5.9.0的common.py替换5.9.2的，
+再按照网上流传的修改方法(164行修改为[data = {‘status’ : True,’msg’ : {‘endtime’ : 32503651199 }};])
+
+
+方法2：
+安装bt5.9
+yum install -y wget && wget -O install.sh http://download.bt.cn/install/install.sh && echo y | sh install.sh
+
+升级到专业版
+wget -O update.sh http://download.bt.cn/install/update_pro.sh && bash update.sh pro
+
+替换common.py
+cd /www/server && cp -r panel panel-bak
+wget http://download.bt.cn/install/update/LinuxPanel-5.9.0_pro.zip
+unzip -o LinuxPanel-5.9.0_pro.zip panel/class/common.py
+rm -f LinuxPanel-5.9.0_pro.zip
+
+sed -i "s/data = panelAuth.panelAuth().get_order_status(None);/data = {'status' : True,'msg' : {'endtime' : 32503651199 }};/" /www/server/panel/class/common.py
+/www/server/panel/data/userInfo.json
+/etc/init.d/bt restart
+
+这样的话，就是显示2099年到期了
+
+主要是安装脚本和5.9.0和5.9.2这三个
+http://download.bt.cn/install/install.sh
+http://download.bt.cn/install/update/LinuxPanel-5.9.0_pro.zip
+http://download.bt.cn/install/update/LinuxPanel-5.9.2_pro.zip
+
+——————————————————————————————
+一键脚本
+
+#确保有wget和unzip
+yum install -y wget unzip
+apt install -y wget unzip
+
+方法1
+#以下代码一起复制粘贴回车
+yum install -y wget && wget -O install.sh http://download.bt.cn/install/install.sh && echo y | sh install.sh && \
+wget -O update.sh http://download.bt.cn/install/update_pro.sh && bash update.sh pro && \
+>/www/server/panel/data/userInfo.json && \
+/etc/init.d/bt restart && /etc/init.d/bt default
+
+方法2
+#以下代码一起复制粘贴回车
+wget -O install.sh http://download.bt.cn/install/install.sh && echo y | sh install.sh && \
+wget -O update.sh http://download.bt.cn/install/update_pro.sh && bash update.sh pro && \
+cd /www/server && cp -r panel panel-bak && \
+wget http://download.bt.cn/install/update/LinuxPanel-5.9.0_pro.zip && \
+unzip -o LinuxPanel-5.9.0_pro.zip panel/class/common.py && rm -f LinuxPanel-5.9.0_pro.zip && \
+sed -i "s/data = panelAuth.panelAuth().get_order_status(None);/data = {'status' : True,'msg' : {'endtime' : 32503651199 }};/" /www/server/panel/class/common.py && \
+>/www/server/panel/data/userInfo.json && \
+/etc/init.d/bt restart && /etc/init.d/bt default
+
+
+转载https://maofun.com/1440.html
+
+宝塔控制面板安全登录插件破解
+删除/www/server/panel/plugin/safelogin/index.html第108行到124行，保存即可。
+转载https://www.vipiu.net/archives/2018/09/08/633.html
+
